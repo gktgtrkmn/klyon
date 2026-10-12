@@ -5,7 +5,7 @@ use std::time::{Duration, SystemTime, UNIX_EPOCH};
 pub struct FileMeta {
     pub size: u64,
     pub modified: i64,
-    pub hash: Option<String>,
+    pub hash: Option<[u8; 32]>,
 }
 
 pub fn system_time_to_nanos(t: SystemTime) -> i64 {
