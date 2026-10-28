@@ -15,7 +15,7 @@ cargo build --release
 # binary at ./target/release/klyon
 ```
 
-Or run through cargo: `cargo run -p klyon -- <command>`.
+Or run through cargo: `cargo run -p klyon --release -- <command>`.
 
 ## Commands
 
