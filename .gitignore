@@ -2,10 +2,10 @@
 
 !/.envrc
 !/.gitignore
+!/README.md
 !/Cargo.toml
 !/Cargo.lock
 !/flake.nix
 !/flake.lock
-!/agent/
+!/klyon/
 !/core/
-!/tui/

@@ -3,24 +3,6 @@
 version = 4
 
 [[package]]
-name = "agent"
-version = "0.1.0"
-dependencies = [
- "blake3",
- "clap",
- "core",
- "dunce",
- "jwalk",
- "log",
- "rayon",
- "rusqlite",
- "tracing",
- "tracing-appender",
- "tracing-subscriber",
- "uuid",
-]
-
-[[package]]
 name = "aho-corasick"
 version = "1.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -392,6 +374,24 @@ checksum = "2735847566356cd2179a2a38264839308f7079fa96e6bd5a42d740460e003c56"
 dependencies = [
  "crossbeam",
  "rayon",
+]
+
+[[package]]
+name = "klyon"
+version = "0.1.0"
+dependencies = [
+ "blake3",
+ "clap",
+ "core",
+ "dunce",
+ "jwalk",
+ "log",
+ "rayon",
+ "rusqlite",
+ "tracing",
+ "tracing-appender",
+ "tracing-subscriber",
+ "uuid",
 ]
 
 [[package]]

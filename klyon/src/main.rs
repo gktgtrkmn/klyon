@@ -16,7 +16,7 @@ use tracing_appender::rolling;
 use tracing_subscriber::{EnvFilter, fmt, layer::SubscriberExt, util::SubscriberInitExt};
 
 #[derive(Parser, Debug)]
-#[command(author, version, about = "File Integrity Monitor", long_about = None)]
+#[command(author, version, about = "klyon — an experimental file integrity monitor", long_about = None)]
 struct Cli {
     #[command(subcommand)]
     command: Command,
@@ -59,13 +59,13 @@ fn resolve(
     found.ok_or_else(|| format!("no baseline found for {selector}").into())
 }
 
-/// Path to the central database (`$FIM_DB`, else `~/.fim/fim.db`).
-fn fim_db_path() -> PathBuf {
-    if let Ok(p) = std::env::var("FIM_DB") {
+/// Path to the central database (`$KLYON_DB`, else `~/.klyon/klyon.db`).
+fn klyon_db_path() -> PathBuf {
+    if let Ok(p) = std::env::var("KLYON_DB") {
         return PathBuf::from(p);
     }
     let home = std::env::var("HOME").unwrap_or_else(|_| ".".into());
-    PathBuf::from(home).join(".fim").join("fim.db")
+    PathBuf::from(home).join(".klyon").join("klyon.db")
 }
 
 /// Human-readable "time since" for a nanos-since-epoch timestamp.
@@ -81,7 +81,7 @@ fn ago(nanos: i64) -> String {
 }
 
 fn init_logging() -> tracing_appender::non_blocking::WorkerGuard {
-    let file_appender = rolling::daily(".fim", "fim.log");
+    let file_appender = rolling::daily(".klyon", "klyon.log");
 
     let (non_blocking_writer, guard) = tracing_appender::non_blocking(file_appender);
 
@@ -188,13 +188,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Open the central DB, creating its directory if needed. Its directory is
     // excluded from every scan so we never hash the DB or logs.
-    let db_path = fim_db_path();
-    let fim_dir = db_path
+    let db_path = klyon_db_path();
+    let klyon_dir = db_path
         .parent()
         .map(Path::to_path_buf)
         .unwrap_or_else(|| PathBuf::from("."));
-    fs::create_dir_all(&fim_dir)?;
-    let exclude = dunce::canonicalize(&fim_dir).unwrap_or(fim_dir);
+    fs::create_dir_all(&klyon_dir)?;
+    let exclude = dunce::canonicalize(&klyon_dir).unwrap_or(klyon_dir);
 
     let mut db = match db::Db::open(&db_path) {
         Ok(d) => d,
@@ -208,7 +208,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         Command::Ls => {
             let baselines = db.list_baselines()?;
             if baselines.is_empty() {
-                println!("No baselines yet. Create one: fim create <name> <path>");
+                println!("No baselines yet. Create one: klyon create <name> <path>");
             }
             for b in &baselines {
                 let last = b.checked_at.map(ago).unwrap_or_else(|| "never".to_string());
